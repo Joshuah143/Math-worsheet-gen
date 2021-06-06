@@ -28,8 +28,6 @@ def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=Fals
         parts = t.split(sep=" ")
         if len(parts) > 3:
             raise Exception
-        if (len(parts[0]) > 4) or (len(parts[2]) > 4):
-            return 'Error: Numbers must only contain digits.'
         if (parts[1] != '-') and (parts[1] != '+'):
             return "Error: Operator must be '+' or '-'."
         if len(parts[0]) > len(parts[2]):
