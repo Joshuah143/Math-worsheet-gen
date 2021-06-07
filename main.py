@@ -8,7 +8,7 @@ import shutil
 import datetime
 import smtplib
 
-
+version = f'version = 0.8.3              time generated: {datetime.datetime.now()}'
 def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=False, genquestions=False):
     if list_of_question is None:
         list_of_question = []
@@ -269,6 +269,8 @@ def printfactor(problems=15,
         canvas2.drawString(leftjustify + 120, top, prob[0][1])
         top -= probspace
         qnum += 1
+    canvas.drawString(0, 0, f'{version}')
+    canvas2.drawString(0, 0, f'{version}')
     canvas.save()
     canvas2.save()
     if destintaionpath is not None:
