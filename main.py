@@ -1,4 +1,3 @@
-import reportlab
 from reportlab.pdfgen.canvas import Canvas
 import random
 import os
@@ -71,7 +70,7 @@ def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1, al
     factorincrease = 15
     co = 1
     posneg = 1
-    b,d = 0, 0
+    b, d = 0, 0
     if positivenegitive == 1:
         posneg = factorranger * -1
     elif positivenegitive == 2:
@@ -93,61 +92,68 @@ def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1, al
     g = int((b * d))
     string = ''
     if e != 1:
-        string += f'{e}x '
+        string += f'{int(e)}x '
     else:
         string += f'x '
     if f > 0:
-        string += f'+ {f}x '
+        string += f'+ {int(f)}x '
     elif f == 0:
         pass
     else:
-        string += f'- {abs(f)}x '
+        string += f'- {int(abs(f))}x '
     if g > 0:
-        string += f'+ {g}'
+        string += f'+ {int(g)}'
     elif g == 0:
         pass
     else:
-        string += f'- {abs(g)}'
+        string += f'- {int(abs(g))}'
     # string = f'{e}x + {f}x + {g}'
     solution = [a, b, c, d]
-    while (checkforfactors(solution) not in solution) and (checkforfactors(solution) != None):
-        factor = checkforfactors(solution)
-        solution.append(factor)
-        e = e / factor
-        f = f / factor
-        g = g / factor
+    y = checkforfactors([a, b])
+    z = checkforfactors([c, d])
+    if y is not None:
+        solution.append(y)
+        a = a // y
+        b = b // y
+    if z is not None:
+        solution.append(z)
+        c = c // z
+        d = d // z
     solutions = ''
     if a != 1:
-        solutions += f'({a}x'
+        solutions += f'({int(a)}x'
     else:
         solutions += '(x'
     if b >= 0:
-        solutions += f'+{b})'
+        solutions += f'+{int(b)})'
     else:
-        solutions += f'{b})'
+        solutions += f'{int(b)})'
     if c != 1:
-        solutions += f'({c}x'
+        solutions += f'({int(c)}x'
     else:
         solutions += '(x'
     if d >= 0:
-        solutions += f'+{d})'
+        solutions += f'+{int(d)})'
     else:
-        solutions += f'{d})'
+        solutions += f'{int(d)})'
     # solutions = f'({a}x{bst})({c}x{dst})'
-    for o in range(len(solution) - 4):
-        ting = o + 4
-        solutions += f'({solution[ting]})'
+    text = sum(solution[4:])
+    if (text != 0) and (text != 0):
+        solutions += f'({text})'
     # list: (tuple: (str, str), int, int, int
     return [(string, solutions), e, f, g]
 
 
 def checkforfactors(lists):
+
+    print(lists)
     for i in range(2, max(lists) + 1):
         t = 0
         for v in lists:
             if v % i == 0:
                 t += 1
         if t == len(lists):
+            print(i)
             return i
     return None
 
