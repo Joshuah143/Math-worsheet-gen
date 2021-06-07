@@ -1,7 +1,7 @@
 import reportlab
 from reportlab.pdfgen.canvas import Canvas
 import random
-
+import os
 
 def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=False, genquestions=False):
     if list_of_question is None:
@@ -55,18 +55,48 @@ def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=Fals
         print(returnable, 'return')
 
 
-# cs = list(arithmetic_arranger(["32 + 698", "3801 - 2", "45 + 43", "123 + 49"], pdfable=True))
-cs = list(arithmetic_arranger(pdfable=True, genquestions=True))
-rows = 8
-canvas = Canvas("hello.pdf")
-canvas.setFont('Courier', 12)
-x = 800
-for i in range(rows):
-    for i in range(4):
-        canvas.drawString(50, x, cs[i])
-        x -= 15
+def quadratic_aranger(modifyco=False, largefactors=False):
+    # (a+b)(c+d)=e+f+g
+    # e = ac
+    # f = bc + ad
+    # g = bd
+    if modifyco:
+        a, b = random.randint(1, 7), random.randint(1, 7)
+    else:
+        a, b = 1
+    print(a, b)
+    pass
+
+
+if False:
+    canvas = Canvas("Teacher-addition.pdf")
+    canvas2 = Canvas("Student-subtraction.pdf")
     cs = list(arithmetic_arranger(pdfable=True, genquestions=True))
-    x -= 40
+    rows = 8
+    watermarktop = 'Math worksheet'
+    watermarkbttom = 'By Joshua Himmens, joshua.himmens@gmail.com'
+    canvas2.setFont('Courier', 20)
+    canvas.setFont('Courier', 20)
+    canvas.drawString(220, 770, watermarktop)
+    canvas2.drawString(220, 770, watermarktop)
+    canvas2.setFont('Courier', 12)
+    canvas.setFont('Courier', 12)
+    canvas.drawString(150, 750, watermarkbttom)
+    canvas2.drawString(150, 750, watermarkbttom)
+    canvas2.setFont('Courier', 12)
+    canvas.setFont('Courier', 12)
+    x = 700
+    leftjustify = 60
+    for i in range(rows):
+        for i in range(4):
+            canvas.drawString(leftjustify, x, cs[i])
+            if i != 3:
+                canvas2.drawString(leftjustify, x, cs[i])
+            x -= 12
+        cs = list(arithmetic_arranger(pdfable=True, genquestions=True))
+        x -= 36
+    canvas.save()
+    canvas2.save()
 
 
-canvas.save()
+
