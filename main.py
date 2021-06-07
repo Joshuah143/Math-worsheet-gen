@@ -149,22 +149,14 @@ def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1, al
 
 
 def checkforfactors(lists):
-
-    print(lists)
     for i in range(2, max(lists) + 1):
         t = 0
         for v in lists:
             if v % i == 0:
                 t += 1
         if t == len(lists):
-            print(i)
             return i
     return None
-
-
-def listfactors(num):
-    facts = lambda num: [i for i in range(2, num) if num % i == 0]
-    return facts(num)
 
 
 def printadditionsubtraction():
@@ -295,12 +287,14 @@ def printfactor(problems=15,
         if os.path.isfile(studentpath + '/' + studentfilename):
             if removeold:
                 os.remove(studentpath + '/' + studentfilename)
+                print('removing old file')
             else:
                 print("FILE EXSISTS, change filename of path")
                 return
         if os.path.isfile(teacherpath + '/' + teacherfilename):
             if removeold:
                 os.remove(teacherpath + '/' + teacherfilename)
+                print('removing old file')
             else:
                 print("FILE EXSISTS, change filename of path")
                 return
@@ -338,3 +332,4 @@ sent at: {datetime.datetime.now()}"""
 
 
 printfactor(probsgetharder=True,)
+print(quadratic_aranger(modifyco=True, largefactors=True, allowzero=True)[0][0])
