@@ -5,6 +5,8 @@ import os
 import math
 import time
 import shutil
+import datetime
+import smtplib
 
 
 def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=False, genquestions=False):
@@ -77,7 +79,11 @@ def quadratic_aranger(modifyco=False, largefactors=False):
     e = int((a * c))
     f = int((b * c) + (a * d))
     g = int((b * d))
+    if e == 1:
+        e = ''
     string = f'{e}x + {f}x + {g}'
+    if e == '':
+        e = 1
     solution = [a, b, c, d]
     while (checkforfactors(solution) not in solution) and (checkforfactors(solution) != None):
         factor = checkforfactors(solution)
@@ -89,6 +95,7 @@ def quadratic_aranger(modifyco=False, largefactors=False):
     for o in range(len(solution) - 4):
         ting = o + 4
         solutions += f'({solution[ting]})'
+    print(string)
     return [(string, solutions), e, f, g]
 
 
@@ -178,7 +185,10 @@ def printfactor(problems=15,
         canvas2.drawString(leftjustify, top, prob[0][0] + ':')
         canvas2.setFont('Courier', 5)
         canvas.setFont('Courier', 5)
-        if prob[1] < 10:
+        if prob[1] == 1:
+            canvas.drawString(leftjustify + 7, top + 5, '2')
+            canvas2.drawString(leftjustify + 7, top + 5, '2')
+        elif prob[1] < 10:
             canvas.drawString(leftjustify+15, top+5, '2')
             canvas2.drawString(leftjustify+15, top+5, '2')
         else:
@@ -202,7 +212,10 @@ def printfactor(problems=15,
         canvas2.drawString(leftjustify, top, prob[0][0] + ':')
         canvas2.setFont('Courier', 5)
         canvas.setFont('Courier', 5)
-        if prob[1] < 10:
+        if prob[1] == 1:
+            canvas.drawString(leftjustify + 7, top + 5, '2')
+            canvas2.drawString(leftjustify + 7, top + 5, '2')
+        elif prob[1] < 10:
             canvas.drawString(leftjustify + 15, top + 5, '2')
             canvas2.drawString(leftjustify + 15, top + 5, '2')
         else:
@@ -220,18 +233,42 @@ def printfactor(problems=15,
         studentpath = destintaionpath + '/Worksheet'
         if not os.path.isdir(studentpath + '/'):
             os.mkdir(studentpath)
+        if os.path.isfile(studentpath + '/' + studentfilename):
+            print("FILE EXSISTS, change filename of path")
+            return
+        if os.path.isfile(teacherpath + '/' + teacherfilename):
+            print("FILE EXSISTS, change filename of path")
+            return
         if not os.path.isdir(teacherpath + '/'):
             os.mkdir(teacherpath)
         shutil.move(studentfilename, studentpath)
         shutil.move(teacherfilename, teacherpath)
 
 
+def sendmail_ssl(message, email, name=None, filename=None):
+    default_smtp_server = "smtp.gmail.com"
+    gmail_user = 'joshua.himmens@gmail.com'
+    gmail_password = 'mmslnuunnmvhvomt'  # add app password
+    default_name = 'Joshua Himmens'
+    server = smtplib.SMTP_SSL(f'{default_smtp_server}', 465)
+    emailintro = "Hi,"
+    emailextro = f"Regards,\n{default_name}\n\n\n This email was automatically sent with python, if there is any errors please email me back at '{gmail_user}'"
+    message = f"""Subject: Automail
+From: {default_name}
+To: {name} <{email}>
+{emailintro}
+{message}
+{emailextro}
+sent at: {datetime.datetime.now()}"""
+    try:
+        server.login(gmail_user, gmail_password)
+        server.sendmail(gmail_user, email, message)
+        server.close()
+        print("email sent")
+        return True
+    except Exception as e:
+        print("email failed" + str(e))
+        return False
 
 
 printfactor(probsgetharder=True)
-printadditionsubtraction()
-for i in range(50):
-    printfactor(probsgetharder=True,
-                studentfilename=f'factor_{i + 1}.pdf',
-                teacherfilename=f'factor_{i + 1}_TEACHER.pdf',
-                destintaionpath='/Users/joshuahimmens/Desktop/Testfolder')
