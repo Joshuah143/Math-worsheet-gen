@@ -111,14 +111,16 @@ def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1, al
     solution = [a, b, c, d]
     y = checkforfactors([a, b])
     z = checkforfactors([c, d])
-    if y is not None:
+    while checkforfactors([a, b]) is not None:
         solution.append(y)
         a = a // y
         b = b // y
-    if z is not None:
+        y = checkforfactors([a, b])
+    while checkforfactors([c, d]) is not None:
         solution.append(z)
         c = c // z
         d = d // z
+        z = checkforfactors([c, d])
     solutions = ''
     if a != 1:
         solutions += f'({int(a)}x'
@@ -137,8 +139,10 @@ def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1, al
     else:
         solutions += f'{int(d)})'
     # solutions = f'({a}x{bst})({c}x{dst})'
-    text = sum(solution[4:])
-    if (text != 0) and (text != 0):
+    text = 1
+    for i in range(4, len(solution)):
+        text = text * solution[i]
+    if (text != 0) and (text != 1):
         solutions += f'({text})'
     # list: (tuple: (str, str), int, int, int
     return [(string, solutions), e, f, g]
@@ -275,8 +279,12 @@ def printfactor(problems=15,
         canvas2.drawString(leftjustify + 120, top, prob[0][1])
         top -= probspace
         qnum += 1
+    canvas2.setFont('Courier', 5)
+    canvas.setFont('Courier', 5)
     canvas.drawString(0, 0, f'{version}')
     canvas2.drawString(0, 0, f'{version}')
+    canvas2.setFont('Courier', 12)
+    canvas.setFont('Courier', 12)
     canvas.save()
     canvas2.save()
     if destintaionpath is not None:
