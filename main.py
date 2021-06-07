@@ -150,7 +150,8 @@ def printfactor(problems=15,
                 probsgetharder=False,
                 studentfilename='Student-factor.pdf',
                 teacherfilename='Teacher-factor.pdf',
-                destintaionpath=None):
+                destintaionpath=None,
+                removeold=False):
     canvas = Canvas(studentfilename)
     canvas2 = Canvas(teacherfilename)
     watermarktop = 'Math worksheet'
@@ -234,11 +235,17 @@ def printfactor(problems=15,
         if not os.path.isdir(studentpath + '/'):
             os.mkdir(studentpath)
         if os.path.isfile(studentpath + '/' + studentfilename):
-            print("FILE EXSISTS, change filename of path")
-            return
+            if removeold:
+                os.remove(studentpath + '/' + studentfilename)
+            else:
+                print("FILE EXSISTS, change filename of path")
+                return
         if os.path.isfile(teacherpath + '/' + teacherfilename):
-            print("FILE EXSISTS, change filename of path")
-            return
+            if removeold:
+                os.remove(teacherpath + '/' + teacherfilename)
+            else:
+                print("FILE EXSISTS, change filename of path")
+                return
         if not os.path.isdir(teacherpath + '/'):
             os.mkdir(teacherpath)
         shutil.move(studentfilename, studentpath)
