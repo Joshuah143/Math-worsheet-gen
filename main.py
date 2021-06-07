@@ -252,7 +252,8 @@ def sendmail_ssl(message, email, name=None, filename=None):
     default_name = 'Joshua Himmens'
     server = smtplib.SMTP_SSL(f'{default_smtp_server}', 465)
     emailintro = "Hi,"
-    emailextro = f"Regards,\n{default_name}\n\n\n This email was automatically sent with python, if there is any errors please email me back at '{gmail_user}'"
+    emailextro = f"Regards,\n{default_name}\n\n\n This email was automatically sent with python," \
+                 f" if there is any errors please email me back at '{gmail_user}'"
     message = f"""Subject: Automail
 From: {default_name}
 To: {name} <{email}>
