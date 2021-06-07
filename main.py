@@ -4,6 +4,7 @@ import random
 import os
 import math
 import time
+import shutil
 
 
 def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=False, genquestions=False):
@@ -138,9 +139,13 @@ def printadditionsubtraction():
     canvas2.save()
 
 
-def printfactor(problems=15, probsgetharder=False):
-    canvas = Canvas('Student-factor.pdf')
-    canvas2 = Canvas('Teacher-factor.pdf')
+def printfactor(problems=15,
+                probsgetharder=False,
+                studentfilename='Student-factor.pdf',
+                teacherfilename='Teacher-factor.pdf',
+                destintaionpath=None):
+    canvas = Canvas(studentfilename)
+    canvas2 = Canvas(teacherfilename)
     watermarktop = 'Math worksheet'
     watermarkbttom = 'By Joshua Himmens, joshua.himmens@gmail.com'
     instructions = 'Factor completly:'
@@ -163,11 +168,11 @@ def printfactor(problems=15, probsgetharder=False):
     qnum = 0
     intervals = [10, 20]
     for i in range(problems):
-        if qnum < intervals[0]:
+        if qnum < intervals[0] and probsgetharder:
             prob = quadratic_aranger()
-        if intervals[0] < qnum < intervals[1]:
+        if intervals[0] < qnum < intervals[1] and probsgetharder:
             prob = quadratic_aranger(largefactors=True)
-        if qnum > intervals[1]:
+        if qnum > intervals[1] and probsgetharder:
             prob = quadratic_aranger(modifyco=True, largefactors=True)
         canvas.drawString(leftjustify, top, prob[0][0] + ':')
         canvas2.drawString(leftjustify, top, prob[0][0] + ':')
@@ -187,11 +192,11 @@ def printfactor(problems=15, probsgetharder=False):
     leftjustify = 300
     top = oldtop
     for i in range(problems):
-        if qnum < intervals[0]:
+        if qnum < intervals[0] and probsgetharder:
             prob = quadratic_aranger()
-        if intervals[0] < qnum < intervals[1]:
+        if intervals[0] < qnum < intervals[1] and probsgetharder:
             prob = quadratic_aranger(largefactors=True)
-        if qnum > intervals[1]:
+        if qnum > intervals[1] and probsgetharder:
             prob = quadratic_aranger(modifyco=True, largefactors=True)
         canvas.drawString(leftjustify, top, prob[0][0] + ':')
         canvas2.drawString(leftjustify, top, prob[0][0] + ':')
@@ -210,9 +215,23 @@ def printfactor(problems=15, probsgetharder=False):
         qnum += 1
     canvas.save()
     canvas2.save()
+    if destintaionpath is not None:
+        teacherpath = destintaionpath + '/Key'
+        studentpath = destintaionpath + '/Worksheet'
+        if not os.path.isdir(studentpath + '/'):
+            os.mkdir(studentpath)
+        if not os.path.isdir(teacherpath + '/'):
+            os.mkdir(teacherpath)
+        shutil.move(studentfilename, studentpath)
+        shutil.move(teacherfilename, teacherpath)
 
 
-time.sleep(2)
+
+
 printfactor(probsgetharder=True)
 printadditionsubtraction()
-print('done')
+for i in range(50):
+    printfactor(probsgetharder=True,
+                studentfilename=f'factor_{i + 1}.pdf',
+                teacherfilename=f'factor_{i + 1}_TEACHER.pdf',
+                destintaionpath='/Users/joshuahimmens/Desktop/Testfolder')
