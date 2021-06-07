@@ -95,7 +95,7 @@ def quadratic_aranger(modifyco=False, largefactors=False):
     for o in range(len(solution) - 4):
         ting = o + 4
         solutions += f'({solution[ting]})'
-    print(string)
+    # list: (tuple: (str, str), int, int, int
     return [(string, solutions), e, f, g]
 
 
