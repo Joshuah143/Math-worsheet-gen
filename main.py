@@ -60,16 +60,18 @@ def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=Fals
         print(returnable, 'return')
 
 
-def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1):
+def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1, allowzero=False):
     # posneg is o for all neg 1 for mix, 2 for all positive
     # (a+b)(c+d)=e+f+g
     # e = ac
     # f = bc + ad
-    # g = bd\
+    # g = bd
     comidify = 7
     factorranger = 10
     factorincrease = 15
     co = 1
+    posneg = 1
+    b,d = 0, 0
     if positivenegitive == 1:
         posneg = factorranger * -1
     elif positivenegitive == 2:
@@ -84,7 +86,8 @@ def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1):
         a, c = 1, 1
     if largefactors:
         factorranger += factorincrease
-    b, d = random.randint(posneg, co * factorranger), random.randint(posneg, co * factorranger)
+    while (b == 0) or (d == 0):
+        b, d = random.randint(posneg, co * factorranger), random.randint(posneg, co * factorranger)
     e = int((a * c))
     f = int((b * c) + (a * d))
     g = int((b * d))
@@ -216,7 +219,7 @@ def printfactor(problems=15,
     intervals = [10, 20]
     for i in range(problems):
         if qnum < intervals[0] and probsgetharder:
-            prob = quadratic_aranger()
+            prob = quadratic_aranger(positivenegitive=2)
         if intervals[0] < qnum < intervals[1] and probsgetharder:
             prob = quadratic_aranger(largefactors=True, positivenegitive=1)
         if qnum > intervals[1] and probsgetharder:
