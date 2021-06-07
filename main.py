@@ -60,14 +60,23 @@ def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=Fals
         print(returnable, 'return')
 
 
-def quadratic_aranger(modifyco=False, largefactors=False):
+def quadratic_aranger(modifyco=False, largefactors=False, positivenegitive=1):
+    # posneg is o for all neg 1 for mix, 2 for all positive
     # (a+b)(c+d)=e+f+g
     # e = ac
     # f = bc + ad
-    # g = bd
+    # g = bd\
     comidify = 7
     factorranger = 10
     factorincrease = 15
+    co = 1
+    if positivenegitive == 1:
+        posneg = factorranger * -1
+    elif positivenegitive == 2:
+        posneg = 1
+    elif positivenegitive == 0:
+        co = -1
+        posneg = 0
     if modifyco:
         a = random.randint(1, comidify)
         c = random.randint(1, comidify)
@@ -75,15 +84,28 @@ def quadratic_aranger(modifyco=False, largefactors=False):
         a, c = 1, 1
     if largefactors:
         factorranger += factorincrease
-    b, d = random.randint(1, factorranger), random.randint(1, factorranger)
+    b, d = random.randint(posneg, co * factorranger), random.randint(posneg, co * factorranger)
     e = int((a * c))
     f = int((b * c) + (a * d))
     g = int((b * d))
-    if e == 1:
-        e = ''
-    string = f'{e}x + {f}x + {g}'
-    if e == '':
-        e = 1
+    string = ''
+    if e != 1:
+        string += f'{e}x '
+    else:
+        string += f'x '
+    if f > 0:
+        string += f'+ {f}x '
+    elif f == 0:
+        pass
+    else:
+        string += f'- {abs(f)}x '
+    if g > 0:
+        string += f'+ {g}'
+    elif g == 0:
+        pass
+    else:
+        string += f'- {abs(g)}'
+    # string = f'{e}x + {f}x + {g}'
     solution = [a, b, c, d]
     while (checkforfactors(solution) not in solution) and (checkforfactors(solution) != None):
         factor = checkforfactors(solution)
@@ -91,7 +113,24 @@ def quadratic_aranger(modifyco=False, largefactors=False):
         e = e / factor
         f = f / factor
         g = g / factor
-    solutions = f'({a}x+{b})({c}x+{d})'
+    solutions = ''
+    if a != 1:
+        solutions += f'({a}x'
+    else:
+        solutions += '(x'
+    if b >= 0:
+        solutions += f'+{b})'
+    else:
+        solutions += f'{b})'
+    if c != 1:
+        solutions += f'({c}x'
+    else:
+        solutions += '(x'
+    if d >= 0:
+        solutions += f'+{d})'
+    else:
+        solutions += f'{d})'
+    # solutions = f'({a}x{bst})({c}x{dst})'
     for o in range(len(solution) - 4):
         ting = o + 4
         solutions += f'({solution[ting]})'
@@ -179,7 +218,7 @@ def printfactor(problems=15,
         if qnum < intervals[0] and probsgetharder:
             prob = quadratic_aranger()
         if intervals[0] < qnum < intervals[1] and probsgetharder:
-            prob = quadratic_aranger(largefactors=True)
+            prob = quadratic_aranger(largefactors=True, positivenegitive=1)
         if qnum > intervals[1] and probsgetharder:
             prob = quadratic_aranger(modifyco=True, largefactors=True)
         canvas.drawString(leftjustify, top, prob[0][0] + ':')
@@ -206,7 +245,7 @@ def printfactor(problems=15,
         if qnum < intervals[0] and probsgetharder:
             prob = quadratic_aranger()
         if intervals[0] < qnum < intervals[1] and probsgetharder:
-            prob = quadratic_aranger(largefactors=True)
+            prob = quadratic_aranger(largefactors=True, positivenegitive=1)
         if qnum > intervals[1] and probsgetharder:
             prob = quadratic_aranger(modifyco=True, largefactors=True)
         canvas.drawString(leftjustify, top, prob[0][0] + ':')
@@ -279,4 +318,4 @@ sent at: {datetime.datetime.now()}"""
         return False
 
 
-printfactor(probsgetharder=True)
+printfactor(probsgetharder=True,)
