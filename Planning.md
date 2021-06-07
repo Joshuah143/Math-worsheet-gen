@@ -18,3 +18,9 @@ Skills needed:
 - smtp email sending with attachements
 - generating pdf with reportlib
 - cloud management
+
+
+Working on now:
+- email support
+- path support for additon
+- remove leading one
