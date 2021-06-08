@@ -6,6 +6,11 @@ import time
 import shutil
 import datetime
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+import sys
+
 
 version = f'version = 0.8.3              time generated: {datetime.datetime.now()}'
 def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=False, genquestions=False):
@@ -277,6 +282,10 @@ def printfactor(problems=15,
     canvas2.drawString(0, 0, f'{version}')
     canvas2.setFont('Courier', 12)
     canvas.setFont('Courier', 12)
+    canvas.setAuthor('Joshua Himmens')
+    canvas2.setAuthor('Joshua Himmens')
+    canvas.setTitle('Math Worksheet')
+    canvas2.setTitle('Math Worksheet')
     canvas.save()
     canvas2.save()
     if destintaionpath is not None:
@@ -304,32 +313,87 @@ def printfactor(problems=15,
         shutil.move(teacherfilename, teacherpath)
 
 
-def sendmail_ssl(message, email, name=None, filename=None):
+def sendmail_ssl(message, email, name=None, filepaths=None, title='Math worksheet'):
     default_smtp_server = "smtp.gmail.com"
-    gmail_user = 'joshua.himmens@gmail.com'
+    gmail_user = 'joshuahimmens@gmail.com'
     gmail_password = 'mmslnuunnmvhvomt'  # add app password
     default_name = 'Joshua Himmens'
-    server = smtplib.SMTP_SSL(f'{default_smtp_server}', 465)
-    emailintro = "Hi,"
+    emailintro = "Hi"
+    if name is not None:
+        emailintro += ' ' + str(name)
+    emailintro += ','
     emailextro = f"Regards,\n{default_name}\n\n\n This email was automatically sent with python," \
                  f" if there is any errors please email me back at '{gmail_user}'"
-    message = f"""Subject: Automail
-From: {default_name}
-To: {name} <{email}>
-{emailintro}
-{message}
-{emailextro}
+    message = f"""
+{emailintro}\n\n{message}\n\n{emailextro}
 sent at: {datetime.datetime.now()}"""
     try:
-        server.login(gmail_user, gmail_password)
-        server.sendmail(gmail_user, email, message)
-        server.close()
+        msg = MIMEMultipart()
+        msg['From'] = gmail_user
+        msg['To'] = email
+        msg['Subject'] = title
+        msg.attach(MIMEText(message, 'plain'))
+        if filepaths is not None:
+            if type(filepaths) == list:
+                for fn in filepaths:
+                    with open(fn, "rb") as f:
+                        attach = MIMEApplication(f.read(), _subtype="pdf")
+                    if '/' in filepaths:
+                        attach.add_header('Content-Disposition', 'attachment',
+                                          filename=str(fn.split(sep='/')[-1]))
+                    else:
+                        attach.add_header('Content-Disposition', 'attachment',
+                                          filename=str(fn))
+                    msg.attach(attach)
+            else:
+                with open(filepaths, "rb") as f:
+                    attach = MIMEApplication(f.read(), _subtype="pdf")
+                if '/' in filepaths:
+                    attach.add_header('Content-Disposition', 'attachment',
+                                      filename=str(filepaths.split(sep='/')[-1]))
+                else:
+                    attach.add_header('Content-Disposition', 'attachment',
+                                      filename=str(filepaths))
+                msg.attach(attach)
+        mailer = smtplib.SMTP_SSL(default_smtp_server, 465)
+        mailer.login(gmail_user, gmail_password)
+        mailer.sendmail(gmail_user, email, msg.as_string())
+        mailer.close()
         print("email sent")
-        return True
-    except Exception as e:
+    except TypeError as e:
         print("email failed" + str(e))
         return False
 
 
-printfactor(probsgetharder=True,)
-print(quadratic_aranger(modifyco=True, largefactors=True, allowzero=True)[0][0])
+def sendfactors(destemail, name=None):
+    printfactor(problems=15,
+                probsgetharder=True,
+                studentfilename='Student-factor.pdf',
+                teacherfilename='Teacher-factor.pdf',
+                destintaionpath=None,
+                removeold=False)
+    sendmail_ssl('Attached is your math worksheet, thanks '
+                 'for using my script. I would really appreciate feedback, so feel free to respond.'
+                 '\n\nThis worksheet was generated just for you, feel free to use it as much as you would like.'
+                 '\n\nI am also more then happy to create whatever you need, just lmk.',
+                 destemail, name=name, filepaths=['Teacher-factor.pdf', 'Student-factor.pdf'])
+
+
+sendfactors('jhimmens@aol.com', 'Jon')
+
+if __name__ == '__main__':
+    args = sys.argv
+    if 'sf' in args:
+        ind = args.index('sf')
+        try:
+            emailgiven = args[ind + 1]
+            try:
+                namegiven = args[ind + 2]
+            except IndexError:
+                namegiven = None
+            try:
+                sendfactors(emailgiven, namegiven)
+            except Exception as e:
+                print(e)
+        except IndexError:
+            print('Error try changing what you entered')
