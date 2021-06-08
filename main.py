@@ -359,7 +359,7 @@ sent at: {datetime.datetime.now()}"""
         mailer.login(gmail_user, gmail_password)
         mailer.sendmail(gmail_user, email, msg.as_string())
         mailer.close()
-        print("email sent")
+        print("email sent", email)
     except TypeError as e:
         print("email failed" + str(e))
         return False
@@ -379,7 +379,13 @@ def sendfactors(destemail, name=None):
                  destemail, name=name, filepaths=['Teacher-factor.pdf', 'Student-factor.pdf'])
 
 
-sendfactors('jhimmens@aol.com', 'Jon')
+printadditionsubtraction()
+printfactor(problems=15,
+                probsgetharder=False,
+                studentfilename='Student-factor.pdf',
+                teacherfilename='Teacher-factor.pdf',
+                destintaionpath=None,
+                removeold=False)
 
 if __name__ == '__main__':
     args = sys.argv
