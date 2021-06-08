@@ -387,7 +387,7 @@ def sendfactors(destemail, name=None):
 
 printadditionsubtraction()
 printfactor(problems=15,
-            probsgetharder=False,
+            probsgetharder=True,
             studentfilename='Student-factor.pdf',
             teacherfilename='Teacher-factor.pdf',
             removeold=False,
