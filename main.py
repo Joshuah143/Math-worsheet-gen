@@ -13,6 +13,8 @@ import sys
 
 
 version = f'version = 0.8.3              time generated: {datetime.datetime.now()}'
+
+
 def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=False, genquestions=False):
     if list_of_question is None:
         list_of_question = []
@@ -200,7 +202,7 @@ def printfactor(problems=15,
                 studentfilename='Student-factor.pdf',
                 teacherfilename='Teacher-factor.pdf',
                 destintaionpath=None,
-                removeold=False):
+                removeold=False) -> None:
     canvas = Canvas(studentfilename)
     canvas2 = Canvas(teacherfilename)
     watermarktop = 'Math worksheet'
@@ -227,10 +229,12 @@ def printfactor(problems=15,
     for i in range(problems):
         if qnum < intervals[0] and probsgetharder:
             prob = quadratic_aranger(positivenegitive=2)
-        if intervals[0] < qnum < intervals[1] and probsgetharder:
+        elif intervals[0] <= qnum <= intervals[1] and probsgetharder:
             prob = quadratic_aranger(largefactors=True, positivenegitive=1)
-        if qnum > intervals[1] and probsgetharder:
+        elif qnum > intervals[1] and probsgetharder:
             prob = quadratic_aranger(modifyco=True, largefactors=True)
+        elif not probsgetharder:
+            prob = quadratic_aranger()
         canvas.drawString(leftjustify, top, prob[0][0] + ':')
         canvas2.drawString(leftjustify, top, prob[0][0] + ':')
         canvas2.setFont('Courier', 5)
@@ -254,10 +258,12 @@ def printfactor(problems=15,
     for i in range(problems):
         if qnum < intervals[0] and probsgetharder:
             prob = quadratic_aranger()
-        if intervals[0] < qnum < intervals[1] and probsgetharder:
+        elif intervals[0] < qnum < intervals[1] and probsgetharder:
             prob = quadratic_aranger(largefactors=True, positivenegitive=1)
-        if qnum > intervals[1] and probsgetharder:
+        elif qnum > intervals[1] and probsgetharder:
             prob = quadratic_aranger(modifyco=True, largefactors=True)
+        elif not probsgetharder:
+            prob = quadratic_aranger()
         canvas.drawString(leftjustify, top, prob[0][0] + ':')
         canvas2.drawString(leftjustify, top, prob[0][0] + ':')
         canvas2.setFont('Courier', 5)
@@ -381,14 +387,15 @@ def sendfactors(destemail, name=None):
 
 printadditionsubtraction()
 printfactor(problems=15,
-                probsgetharder=False,
-                studentfilename='Student-factor.pdf',
-                teacherfilename='Teacher-factor.pdf',
-                destintaionpath=None,
-                removeold=False)
+            probsgetharder=False,
+            studentfilename='Student-factor.pdf',
+            teacherfilename='Teacher-factor.pdf',
+            removeold=False,
+            destintaionpath=None)
 
 if __name__ == '__main__':
     args = sys.argv
+    print(args)
     if 'sf' in args:
         ind = args.index('sf')
         try:
