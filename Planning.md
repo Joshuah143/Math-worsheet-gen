@@ -21,5 +21,5 @@ Skills needed:
 
 
 Working on now:
-- email support
+- Square support in the ans
 - path support for additon
