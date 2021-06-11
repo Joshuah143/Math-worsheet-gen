@@ -15,9 +15,7 @@ import sys
 version = f'version = 0.8.3              time generated: {datetime.datetime.now()}'
 
 
-def arithmetic_arranger(list_of_question=None, return_or_not=False, pdfable=False, genquestions=False):
-    if list_of_question is None:
-        list_of_question = []
+def arithmetic_arranger(list_of_question=[], return_or_not=False, pdfable=False, genquestions=False):
     if genquestions:
         for i in range(7):
             top = random.randint(1000, 9999)
