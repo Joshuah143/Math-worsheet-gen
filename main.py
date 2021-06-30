@@ -320,7 +320,7 @@ def printfactor(problems=15,
 def sendmail_ssl(message, email, name=None, filepaths=None, title='Math worksheet'):
     default_smtp_server = "smtp.gmail.com"
     gmail_user = 'joshuahimmens@gmail.com'
-    gmail_password = 'mmslnuunnmvhvomt'  # add app password
+    gmail_password = ''  # todo: add app password
     default_name = 'Joshua Himmens'
     emailintro = "Hi"
     if name is not None:
